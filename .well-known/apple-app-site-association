@@ -3,8 +3,8 @@
     "apps": [],
     "details": [
       {
-        "appID": "TEAM_ID.com.vnpt.qhxd_hanoi",
-        "paths": ["/planning", "/planning/*"]
+        "appID": "TEAM_ID.com.example.qhxd_hanoi",
+        "paths": ["/planning", "/planning/*", "/*"]
       }
     ]
   }

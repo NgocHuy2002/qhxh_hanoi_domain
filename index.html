@@ -5,66 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QHXD Hà Nội - Thông tin quy hoạch</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px 30px;
             text-align: center;
         }
-        .loading { font-size: 24px; margin: 20px 0; }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .loading {
+            margin: 30px 0;
+        }
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            border-top: 4px solid #667eea;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 0 auto 20px;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .info {
-            background: #e3f2fd;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
+        .status {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 10px;
         }
-        .buttons a {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 24px;
-            background: #2196F3;
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .info-box h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: #667eea;
             color: white;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 16px;
         }
-        .buttons a:hover { background: #1976D2; }
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .planning-id {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px 0;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <h1>🗺️ QHXD Hà Nội</h1>
-    <div class="loading">
-        <div class="spinner"></div>
-        <p>Đang mở ứng dụng...</p>
-    </div>
+    <div class="container">
+        <div class="icon">🗺️</div>
+        <h1>QHXD Hà Nội</h1>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="status">Đang mở ứng dụng...</p>
+        </div>
 
-    <div class="info">
-        <h3>Ứng dụng chưa được cài đặt?</h3>
-        <p>Tải ứng dụng QHXD Hà Nội để xem thông tin quy hoạch</p>
-        <div class="buttons">
-            <a href="https://play.google.com/store" target="_blank">📱 Android</a>
-            <a href="https://apps.apple.com" target="_blank">🍎 iOS</a>
+        <div class="info-box" id="infoBox" style="display: none;">
+            <h3>Ứng dụng chưa được cài đặt?</h3>
+            <p>Tải ứng dụng QHXD Hà Nội để xem thông tin quy hoạch chi tiết</p>
+            <div id="planningInfo"></div>
+            <div class="buttons">
+                <a href="https://play.google.com/store" class="btn" target="_blank">
+                    📱 Tải cho Android
+                </a>
+                <a href="https://apps.apple.com" class="btn btn-secondary" target="_blank">
+                    🍎 Tải cho iOS
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
         // Get URL parameters
-        const params = new URLSearchParams(window.location.search);
-        const objectid = params.get('objectid');
-        const malienket = params.get('malienket');
+        const urlParams = new URLSearchParams(window.location.search);
+        const objectid = urlParams.get('objectid');
+        const malienket = urlParams.get('malienket');
+        
+        // Display planning info if available
+        if (objectid || malienket) {
+            const planningInfo = document.getElementById('planningInfo');
+            let infoText = '';
+            if (objectid) infoText = `Mã đối tượng: <span class="planning-id">${objectid}</span>`;
+            if (malienket) infoText = `Mã liên kết: <span class="planning-id">${malienket}</span>`;
+            planningInfo.innerHTML = infoText;
+        }
         
         // Build deep link URL
         let deepLink = 'qhxd://planning';
@@ -72,15 +161,16 @@
             deepLink += '?' + window.location.search.substring(1);
         }
         
-        // Try to open the app
         console.log('Attempting to open:', deepLink);
+        
+        // Try to open the app
         window.location.href = deepLink;
         
-        // After 2 seconds, assume app is not installed
+        // After 2.5 seconds, show the download info
         setTimeout(function() {
-            document.querySelector('.loading').innerHTML = 
-                '<p style="color: #666;">Không thể mở ứng dụng tự động.<br>Vui lòng cài đặt ứng dụng QHXD Hà Nội.</p>';
-        }, 2000);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('infoBox').style.display = 'block';
+        }, 2500);
     </script>
 </body>
 </html>
