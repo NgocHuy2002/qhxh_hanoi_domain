@@ -155,10 +155,13 @@
             planningInfo.innerHTML = infoText;
         }
         
-        // Build deep link URL
+        // Build deep link URL - use qhxd:// scheme
         let deepLink = 'qhxd://planning';
-        if (objectid || malienket) {
-            deepLink += '?' + window.location.search.substring(1);
+        const params = [];
+        if (objectid) params.push(`objectid=${objectid}`);
+        if (malienket) params.push(`malienket=${malienket}`);
+        if (params.length > 0) {
+            deepLink += '?' + params.join('&');
         }
         
         console.log('Attempting to open:', deepLink);
