@@ -6,7 +6,7 @@ This repository hosts the deep link redirect page for the QHXD Hà Nội mobile 
 
 When users share planning information from the app, they'll get a link like:
 ```
-https://ngochuy2002.github.io/qhxh_hanoi_domain/planning?objectid=4742
+https://ngochuy2002.github.io/qhxh_hanoi_domain?objectid=4742
 ```
 
 This link:
