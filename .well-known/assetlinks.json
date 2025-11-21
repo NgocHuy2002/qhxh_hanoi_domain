@@ -3,8 +3,9 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.example.qhxd_hanoi",
+    // change this to your own fingerprints sha256
     "sha256_cert_fingerprints": [
-      "E9:31:E6:22:B3:F3:4C:38:E3:99:3A:2E:21:DD:CF:F0:91:7D:9C:11:55:67:FF:D4:7F:A3:A0:14:49:77:52:21" // change this to your own fingerprints sha256
+      "E9:31:E6:22:B3:F3:4C:38:E3:99:3A:2E:21:DD:CF:F0:91:7D:9C:11:55:67:FF:D4:7F:A3:A0:14:49:77:52:21" 
     ]
   }
 }]
